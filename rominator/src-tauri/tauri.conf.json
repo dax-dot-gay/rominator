@@ -13,8 +13,8 @@
     "allowlist": {
       "all": false,
       "fs": {
-        "scope": ["$APPDATA/**"],
-        "all": true
+          "scope": ["$APPDATA/**", "$APPCONFIG/**"],
+          "all": true
       },
       "http": {
         "scope": ["https://*"],
