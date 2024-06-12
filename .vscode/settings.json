@@ -5,5 +5,6 @@
     "**/*.sass",
     "**/*.less",
     "rominator/node_modules/@mantine/core/styles.css"
-  ]
+  ],
+  "rust-analyzer.linkedProjects": ["rominator/src-tauri/Cargo.toml"]
 }
