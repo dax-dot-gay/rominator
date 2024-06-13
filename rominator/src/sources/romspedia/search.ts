@@ -3,6 +3,7 @@ import { PlatformIDs } from "../../util/platforms";
 import { PluginSearchResult } from "../../util/plugins/pluginTypes";
 import { ResponseType, fetch } from "@tauri-apps/api/http";
 import { invert, range, startCase } from "lodash";
+import { sleep } from "../../util/functions";
 
 const PLATFORM_MAP: Omit<{ [key in PlatformIDs]: string }, "xboxone"> = {
     psp: "playstation-portable",
@@ -142,6 +143,7 @@ export async function search_romspedia(
 
     await Promise.all(
         range(1, pages + 1).map(async (page) => {
+            await sleep(Math.random() * 2);
             const result = await fetch<string>(
                 `https://www.romspedia.com/search.php?currentpage=${page}&search_term_string=${encodeURIComponent(query)}`,
                 { responseType: ResponseType.Text, method: "GET", timeout: 5 },
