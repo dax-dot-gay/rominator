@@ -36,6 +36,7 @@ type ParsedRomItem = {
     tags: string[];
     rating?: number;
     image?: string;
+    detail_page: string;
 };
 
 function parsePage(html: string): ParsedRomItem[] {
@@ -44,6 +45,9 @@ function parsePage(html: string): ParsedRomItem[] {
     const results: ParsedRomItem[] = rom_items
         .map((item) => {
             const rom_ref = item.closest("a") as unknown as HTMLElement;
+            const name_ref = item.querySelector(
+                ".roms-title",
+            ) as unknown as HTMLElement;
             const rating_ref = item.querySelector(
                 ".single-rom-header .list-rom-rating",
             ) as unknown as HTMLElement;
@@ -56,7 +60,7 @@ function parsePage(html: string): ParsedRomItem[] {
             ) as unknown as HTMLElement;
 
             if (
-                [rom_ref, rating_ref, img_ref, platform_ref].some(
+                [rom_ref, rating_ref, img_ref, platform_ref, name_ref].some(
                     (v) => v === null,
                 )
             ) {
@@ -73,7 +77,7 @@ function parsePage(html: string): ParsedRomItem[] {
                 rom_link.split("/")[2] +
                 "-" +
                 rom_link.split("/")[3];
-            const name = rom_ref.getAttribute("title") ?? startCase(id);
+            const name = name_ref.innerText ?? startCase(id);
             const platform =
                 platform_ref.getAttribute("href")?.split("/")[2] ?? null;
             if (!platform) {
@@ -99,6 +103,7 @@ function parsePage(html: string): ParsedRomItem[] {
                     image && !image.includes("image-unavailable-cover")
                         ? image
                         : undefined,
+                detail_page: `https://www.romspedia.com${rom_link}`,
             };
         })
         .filter((v) => v !== null) as ParsedRomItem[];
@@ -162,6 +167,9 @@ export async function search_romspedia(
                             },
                             image: v.image,
                             platform: v.platform,
+                            extra: {
+                                detail_page: v.detail_page,
+                            },
                         }))
                         .filter(
                             (v) =>

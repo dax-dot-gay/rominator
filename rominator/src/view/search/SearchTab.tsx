@@ -40,10 +40,12 @@ import { useSearch, useSources } from "../../sources";
 import { Plugin, PluginSearchResult } from "../../util/plugins/pluginTypes";
 import { uniqBy } from "lodash";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { useDownloads } from "../../downloader";
 
 const ResultItem = memo(
     ({ item, plugin }: { item: PluginSearchResult; plugin: Plugin }) => {
         const platform = platforms.get(item.platform ?? "unknown");
+        const { addDownload } = useDownloads();
 
         return (
             <Paper className="result-item" id={item.id} p="sm">
@@ -73,7 +75,10 @@ const ResultItem = memo(
                                 </Text>
                             </Stack>
                         </Group>
-                        <ActionIcon variant="light">
+                        <ActionIcon
+                            variant="light"
+                            onClick={() => addDownload(item, plugin)}
+                        >
                             <IconDownload size={20} />
                         </ActionIcon>
                     </Group>
@@ -162,6 +167,7 @@ export function SearchTab() {
     );
     const theme = useMantineTheme();
     const sources = useSources();
+    console.log(results);
 
     return (
         <Stack className="app-view search" gap="sm" h="100%">

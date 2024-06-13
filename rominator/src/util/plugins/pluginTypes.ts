@@ -1,4 +1,3 @@
-import { FetchOptions } from "@tauri-apps/api/http";
 import { PlatformIDs } from "../platforms";
 
 export type Plugin = {
@@ -14,13 +13,11 @@ export type Plugin = {
     ) => Promise<void>;
     getDownloadOptions: (
         item: PluginSearchResult,
-    ) => Promise<({ url: string } & FetchOptions) | null>;
-};
-
-export type PluginDownloadInfo = {
-    cookies?: { [key: string]: string };
-    headers?: { [key: string]: string };
-    extract?: boolean;
+    ) => Promise<{
+        url: string;
+        filename: string;
+        headers?: Map<string, string>;
+    } | null>;
 };
 
 export type PluginSearchResult = {

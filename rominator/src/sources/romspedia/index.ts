@@ -1,6 +1,7 @@
 import { Plugin } from "../../util/plugins/pluginTypes";
-import platforms, { PlatformIDs } from "../../util/platforms";
+import { PlatformIDs } from "../../util/platforms";
 import { search_romspedia } from "./search";
+import { downloadRomsPedia } from "./download";
 
 export const sourceRomsPedia: Plugin = {
     id: "romspedia",
@@ -25,5 +26,5 @@ export const sourceRomsPedia: Plugin = {
         PlatformIDs.THREEDS,
         PlatformIDs.WII,
     ],
-    getDownloadOptions: async () => null,
+    getDownloadOptions: downloadRomsPedia,
 };

@@ -4,6 +4,7 @@ import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import { RootView } from "./view/root";
 import { SourceProvider } from "./sources";
+import { DownloadProvider } from "./downloader";
 
 function App() {
     return (
@@ -29,10 +30,12 @@ function App() {
             })}
         >
             <SourceProvider>
-                <ModalsProvider>
-                    <Notifications />
-                    <RootView />
-                </ModalsProvider>
+                <DownloadProvider>
+                    <ModalsProvider>
+                        <Notifications />
+                        <RootView />
+                    </ModalsProvider>
+                </DownloadProvider>
             </SourceProvider>
         </MantineProvider>
     );

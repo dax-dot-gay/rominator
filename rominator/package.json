@@ -1,43 +1,45 @@
 {
-  "name": "rominator",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "tauri": "tauri"
-  },
-  "dependencies": {
-    "@mantine/core": "^7.10.1",
-    "@mantine/form": "^7.10.1",
-    "@mantine/hooks": "^7.10.1",
-    "@mantine/modals": "^7.10.1",
-    "@mantine/notifications": "^7.10.1",
-    "@tabler/icons-react": "^3.5.0",
-    "@tauri-apps/api": "^1",
-    "@tauri-apps/plugin-upload": "^2.0.0-beta.6",
-    "lodash": "^4.17.21",
-    "lowdb": "^7.0.1",
-    "node-html-parser": "^6.1.13",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-responsive-masonry": "^2.2.0"
-  },
-  "devDependencies": {
-    "@tauri-apps/cli": "^1",
-    "@types/lodash": "^4.17.5",
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
-    "@types/react-responsive-masonry": "^2.1.3",
-    "@vitejs/plugin-react": "^4.2.1",
-    "postcss": "^8.4.38",
-    "postcss-preset-mantine": "^1.15.0",
-    "postcss-simple-vars": "^7.0.1",
-    "prettier": "^3.3.2",
-    "sass": "^1.77.5",
-    "typescript": "^5.0.2",
-    "vite": "^5.0.0"
-  }
+    "name": "rominator",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "tauri": "tauri"
+    },
+    "dependencies": {
+        "@mantine/core": "^7.10.1",
+        "@mantine/form": "^7.10.1",
+        "@mantine/hooks": "^7.10.1",
+        "@mantine/modals": "^7.10.1",
+        "@mantine/notifications": "^7.10.1",
+        "@tabler/icons-react": "^3.5.0",
+        "@tauri-apps/api": "^1",
+        "lodash": "^4.17.21",
+        "lowdb": "^7.0.1",
+        "node-html-parser": "^6.1.13",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-responsive-masonry": "^2.2.0",
+        "tauri-plugin-upload-api": "https://github.com/tauri-apps/tauri-plugin-upload#v1",
+        "uuid": "^10.0.0"
+    },
+    "devDependencies": {
+        "@tauri-apps/cli": "^1",
+        "@types/lodash": "^4.17.5",
+        "@types/react": "^18.2.15",
+        "@types/react-dom": "^18.2.7",
+        "@types/react-responsive-masonry": "^2.1.3",
+        "@types/uuid": "^9.0.8",
+        "@vitejs/plugin-react": "^4.2.1",
+        "postcss": "^8.4.38",
+        "postcss-preset-mantine": "^1.15.0",
+        "postcss-simple-vars": "^7.0.1",
+        "prettier": "^3.3.2",
+        "sass": "^1.77.5",
+        "typescript": "^5.0.2",
+        "vite": "^5.0.0"
+    }
 }
