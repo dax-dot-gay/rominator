@@ -1,3 +1,4 @@
+import { FetchOptions } from "@tauri-apps/api/http";
 import { PlatformIDs } from "../platforms";
 
 export type Plugin = {
@@ -9,7 +10,11 @@ export type Plugin = {
         query: string,
         platforms: (string | PlatformIDs)[],
         tags: string[],
-    ) => Promise<PluginSearchResult[]>;
+        onResult: (...results: PluginSearchResult[]) => void,
+    ) => Promise<void>;
+    getDownloadOptions: (
+        item: PluginSearchResult,
+    ) => Promise<({ url: string } & FetchOptions) | null>;
 };
 
 export type PluginDownloadInfo = {
@@ -19,9 +24,11 @@ export type PluginDownloadInfo = {
 };
 
 export type PluginSearchResult = {
+    id: string;
     plugin: string;
     name: string;
     platform?: string | PlatformIDs;
+    image?: string;
     meta: Partial<{
         description: string;
         rating: number; // Ratio 0-1
@@ -29,5 +36,5 @@ export type PluginSearchResult = {
         release_year: string;
     }>;
     tags: string[];
-    url: string;
+    extra?: any;
 };

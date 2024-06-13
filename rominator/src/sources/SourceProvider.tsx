@@ -3,7 +3,7 @@ import SOURCES from "./sources";
 import { useListState } from "@mantine/hooks";
 import { PlatformIDs } from "../util/platforms";
 import { SourceContext } from "./types";
-import { flatten } from "lodash";
+import { PluginSearchResult } from "../util/plugins/pluginTypes";
 
 export function SourceProvider({
     children,
@@ -29,6 +29,7 @@ export function SourceProvider({
             query: string,
             platforms: (string | PlatformIDs)[],
             tags: string[],
+            onResult: (...results: PluginSearchResult[]) => void,
         ) {
             const toSearch = Object.values(sources).filter(
                 (source) =>
@@ -40,12 +41,10 @@ export function SourceProvider({
                             (source.platforms ?? []).includes(platform),
                         )),
             );
-            console.log(toSearch);
-            return flatten(
-                await Promise.all(
-                    toSearch.map((source) =>
-                        source.search(query, platforms, tags),
-                    ),
+            await Promise.all(
+                toSearch.map(
+                    async (source) =>
+                        await source.search(query, platforms, tags, onResult),
                 ),
             );
         },

@@ -25,4 +25,5 @@ export const sourceRomsPedia: Plugin = {
         PlatformIDs.THREEDS,
         PlatformIDs.WII,
     ],
+    getDownloadOptions: async () => null,
 };

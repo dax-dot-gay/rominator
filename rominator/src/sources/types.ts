@@ -10,12 +10,13 @@ export type SourceContextType = {
         query: string,
         platforms: (string | PlatformIDs)[],
         tags: string[],
-    ) => Promise<PluginSearchResult[]>;
+        onResult: (...results: PluginSearchResult[]) => void,
+    ) => Promise<void>;
 };
 
 export const SourceContext = createContext<SourceContextType>({
     sources: {},
     enabled: [],
     setEnabled: () => {},
-    search: async () => [],
+    search: async () => {},
 });

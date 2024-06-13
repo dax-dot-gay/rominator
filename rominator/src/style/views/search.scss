@@ -1,0 +1,9 @@
+.result-box {
+    flex-grow: 1;
+    flex-direction: row;
+    overflow-y: auto;
+
+    .result-item {
+        background-color: var(--mantine-color-default);
+    }
+}
