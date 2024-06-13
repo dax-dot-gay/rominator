@@ -40,6 +40,7 @@ export function SourceProvider({
                             (source.platforms ?? []).includes(platform),
                         )),
             );
+            console.log(toSearch);
             return flatten(
                 await Promise.all(
                     toSearch.map((source) =>

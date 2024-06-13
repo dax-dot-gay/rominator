@@ -44,8 +44,6 @@ export function SearchTab() {
         [query, advanced, platformFilter, tagFilter, setResults],
     );
 
-    console.log(results);
-
     return (
         <Stack className="app-view search" gap="sm">
             <Stack gap="xs" className="search-input">
@@ -60,7 +58,7 @@ export function SearchTab() {
                         size="md"
                     />
                     {!advanced && (
-                        <ActionIcon size={42} onClick={search}>
+                        <ActionIcon size={42} onClick={() => search()}>
                             <IconSearch size={20} />
                         </ActionIcon>
                     )}
@@ -120,6 +118,7 @@ export function SearchTab() {
                                                 </Group>
                                                 <Checkbox
                                                     checked={item.checked}
+                                                    readOnly
                                                 />
                                             </Group>
                                         );
@@ -144,6 +143,7 @@ export function SearchTab() {
                                 leftSection={<IconSearch size={16} />}
                                 h="36"
                                 style={{ minWidth: "fit-content" }}
+                                onClick={() => search()}
                             >
                                 Search
                             </Button>
