@@ -2865,6 +2865,7 @@ version = "0.0.0"
 dependencies = [
  "async_zip",
  "futures-lite",
+ "reqwest 0.12.4",
  "sanitize-filename",
  "serde",
  "serde_json",

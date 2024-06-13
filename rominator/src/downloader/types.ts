@@ -22,3 +22,11 @@ export const DownloadContext = createContext<DownloadContextType>({
     downloads: new Map(),
     addDownload: () => null,
 });
+
+export type DownloadProgress = {
+    download_id: string;
+    filesize: number;
+    transfered: number;
+    transfer_rate: number;
+    percentage: number;
+};

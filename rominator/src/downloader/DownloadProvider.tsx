@@ -1,13 +1,22 @@
 import { useMap } from "@mantine/hooks";
 import { ReactNode, useCallback, useEffect, useState } from "react";
-import { Download, DownloadContext } from "./types";
+import { Download, DownloadContext, DownloadProgress } from "./types";
 import { Plugin, PluginSearchResult } from "../util/plugins/pluginTypes";
-import { download as tauriDownload } from "tauri-plugin-upload-api";
+import { invoke } from "@tauri-apps/api";
 import { v4 } from "uuid";
-import { appDataDir, resolve } from "@tauri-apps/api/path";
-import { listen } from "@tauri-apps/api/event";
+import { appDataDir } from "@tauri-apps/api/path";
+import { Event, UnlistenFn, listen } from "@tauri-apps/api/event";
 
 const MAX_RUNNING = 4;
+
+async function downloadFile(download: Download) {
+    await invoke("download_file", {
+        id: download.id,
+        url: download.url as string,
+        directory: await appDataDir(),
+        filename: download.filename as string,
+    });
+}
 
 export function DownloadProvider({
     children,
@@ -16,12 +25,49 @@ export function DownloadProvider({
 }) {
     const downloads = useMap<string, Download>([]);
     const [sync, setSync] = useState<number>(Date.now());
-    listen("download://progress", console.log);
 
     useEffect(() => {
         const interval = setInterval(() => setSync(Date.now()), 500);
         return () => clearInterval(interval);
     }, [setSync]);
+
+    const updateDownload = useCallback(
+        (event: Event<DownloadProgress>) => {
+            const target = downloads.get(event.payload.download_id);
+            if (!target) {
+                return;
+            }
+
+            target.progress = event.payload.percentage / 100;
+            if (event.event === "rom://download:complete") {
+                target.status = "done";
+            }
+            downloads.set(target.id, target);
+            console.log(target.filename, target.progress);
+        },
+        [downloads],
+    );
+
+    useEffect(() => {
+        let unlisten_progress: UnlistenFn | null = null;
+        listen<DownloadProgress>(
+            "rom://download:progress",
+            updateDownload,
+        ).then((v) => (unlisten_progress = v));
+        let unlisten_complete: UnlistenFn | null = null;
+        listen<DownloadProgress>(
+            "rom://download:complete",
+            updateDownload,
+        ).then((v) => (unlisten_complete = v));
+        return () => {
+            if (unlisten_complete) {
+                unlisten_complete();
+            }
+            if (unlisten_progress) {
+                unlisten_progress();
+            }
+        };
+    }, [updateDownload]);
 
     const addDownload = useCallback(
         (item: PluginSearchResult, plugin: Plugin) => {
@@ -55,30 +101,6 @@ export function DownloadProvider({
         [downloads],
     );
 
-    const execDownload = useCallback(
-        async (download: Download) => {
-            console.log(download);
-            await tauriDownload(
-                download.url as string,
-                await resolve(await appDataDir(), download.filename as string),
-                (progress, total) => {
-                    console.log(progress, total);
-                    downloads.set(download.id, {
-                        ...download,
-                        progress: progress / total,
-                    });
-                },
-                download.headers,
-            );
-            downloads.set(download.id, {
-                ...download,
-                progress: 1,
-                status: "done",
-            });
-        },
-        [downloads.set],
-    );
-
     useEffect(() => {
         let running = 0;
         for (const [id, download] of downloads.entries()) {
@@ -89,7 +111,7 @@ export function DownloadProvider({
                 case "queued":
                     if (running < MAX_RUNNING) {
                         running++;
-                        execDownload(
+                        downloadFile(
                             downloads
                                 .set(id, {
                                     ...download,

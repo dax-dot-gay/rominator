@@ -8,6 +8,32 @@ use tokio::{
     io::BufReader,
 };
 use tokio_util::compat::{TokioAsyncReadCompatExt, TokioAsyncWriteCompatExt};
+use reqwest;
+use serde::{Deserialize, Serialize};
+use tauri::{AppHandle, Manager};
+use std::time::Instant;
+use futures_lite::StreamExt;
+use tokio::io::AsyncWriteExt;
+use std::cmp::min;
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Progress {
+    pub download_id: String,
+    pub filesize: u64,
+    pub transfered: u64,
+    pub transfer_rate: f64,
+    pub percentage: f64,
+}
+
+impl Progress {
+    pub fn emit_progress(&self, handle: &AppHandle) {
+        handle.emit_all("rom://download:progress", &self).ok();
+    }
+
+    pub fn emit_finished(&self, handle: &AppHandle) {
+        handle.emit_all("rom://download:complete", &self).ok();
+    }
+}
 
 /// Returns a relative path without reserved names, redundant separators, ".", or "..".
 fn sanitize_file_path(path: &str) -> PathBuf {
@@ -17,6 +43,70 @@ fn sanitize_file_path(path: &str) -> PathBuf {
         .split('/')
         .map(sanitize_filename::sanitize)
         .collect()
+}
+
+const UPDATE_SPEED: u128 = 500;
+
+pub async fn start_download(url: String, directory: String, filename: String, id: String, handle: AppHandle) {
+    let res = reqwest::Client::new()
+        .get(&url)
+        .send()
+        .await
+        .or(Err(format!("Failed to GET from '{}'", &url)))
+        .expect(&format!("Failed to GET from '{}'", &url));
+
+    let filepath = Path::new(&directory).join(format!("{}.cbz", filename));
+    let mut file = File::create(&filepath).await.or({
+        Err("Error while creating the file")
+    }).expect("File creation failed.");
+
+    let start = Instant::now();
+    let mut last_update = Instant::now();
+
+    let mut downloaded_bytes: u64 = 0;
+    let filesize = res.content_length().expect("Failed to retrieve content length");
+    let mut stream = res.bytes_stream();
+
+    
+
+    let mut progress = Progress {
+        download_id: id,
+        filesize: filesize,
+        transfered: 0,
+        transfer_rate: 0.0,
+        percentage: 0.0,
+    };
+
+    tokio::spawn(async move {
+        while let Some(item) = stream.next().await {
+            let chunk = match item {
+                Ok(chunk) => chunk,
+                Err(_) => {
+                    println!("Error while downloading file");
+                    break;
+                }
+            };
+
+            file.write_all(&chunk).await.expect("Write operation failed.");
+
+            downloaded_bytes = min(downloaded_bytes + (chunk.len() as u64), filesize);
+
+            progress.transfered = downloaded_bytes;
+            progress.percentage = (progress.transfered * 100 / filesize) as f64;
+            progress.transfer_rate = (downloaded_bytes as f64) / (start.elapsed().as_secs() as f64)
+                + (start.elapsed().subsec_nanos() as f64 / 1_000_000_000.0).trunc();
+
+            if last_update.elapsed().as_millis() >= UPDATE_SPEED {
+                progress.emit_progress(&handle);
+                last_update = std::time::Instant::now();
+            }
+        }
+
+        progress.transfered = filesize;
+        progress.percentage = 100.0;
+        progress.emit_progress(&handle);
+        progress.emit_finished(&handle);
+    });
 }
 
 /// Extracts everything from the ZIP archive to the output directory
@@ -68,11 +158,17 @@ async fn extract_file(archive_path: String, extract_path: String) {
   unzip_file(archive, out_dir).await;
 }
 
+#[tauri::command]
+async fn download_file(id: String, url: String, directory: String, filename: String, app: tauri::AppHandle) {
+    start_download(url, directory, filename, id, app).await;
+}
+
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_persisted_scope::init())
         .plugin(tauri_plugin_upload::init())
         .invoke_handler(tauri::generate_handler![extract_file])
+        .invoke_handler(tauri::generate_handler![download_file])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
