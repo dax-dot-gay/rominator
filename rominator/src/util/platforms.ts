@@ -99,6 +99,7 @@ platforms.add(
     "famicom",
     "Famicom",
     "Nintendo",
+    "Famicom",
     "Nintendo - Family Computer Disk System.svg",
 );
 platforms.add("xbox", "Xbox", "Microsoft");
