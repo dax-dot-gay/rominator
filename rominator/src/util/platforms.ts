@@ -20,6 +20,8 @@ type ResolvedPlatform = {
     icon: string;
 };
 
+
+
 class Platforms {
     private platforms_int: { [key: string]: Platform };
     public constructor() {
@@ -27,7 +29,7 @@ class Platforms {
     }
 
     public add(
-        id: string,
+        id: string | PlatformIDs,
         name: string,
         vendor: string,
         shortName?: string | null,
@@ -41,7 +43,7 @@ class Platforms {
         };
     }
 
-    public get(id: string): ResolvedPlatform | null {
+    public get(id: string | PlatformIDs): ResolvedPlatform | null {
         if (Object.keys(this.platforms_int).includes(id)) {
             const platform = this.platforms_int[id];
             return {
@@ -80,6 +82,7 @@ platforms.add("wii", "Wii", "Nintendo", "Wii");
 platforms.add("gamecube", "GameCube", "Nintendo", "GameCube");
 platforms.add("n64", "Nintendo 64", "Nintendo");
 platforms.add("snes", "Super Nintendo Entertainment System", "Nintendo");
+platforms.add("ps1", "PlayStation 1", "Sony", null, "Sony - PlayStation.svg");
 platforms.add("ps3", "PlayStation 3", "Sony");
 platforms.add("nes", "Nintendo Entertainment System", "Nintendo");
 platforms.add("gbc", "Game Boy Color", "Nintendo");
@@ -98,5 +101,31 @@ platforms.add(
     "Nintendo",
     "Nintendo - Family Computer Disk System.svg",
 );
+platforms.add("xbox", "Xbox", "Microsoft");
+platforms.add("xbox360", "Xbox 360", "Microsoft");
+platforms.add("xboxone", "Xbox One", "Microsoft");
+
+export enum PlatformIDs {
+    PSP = "psp",
+    GBA = "gba",
+    PS2 = "ps2",
+    NDS = "nds",
+    THREEDS = "3ds",
+    WII = "wii",
+    GAMECUBE = "gamecube",
+    N64 = "n64",
+    SNES = "snes",
+    PS1 = "ps1",
+    PS3 = "ps3",
+    NES = "nes",
+    GBC = "gbc",
+    GENESIS = "genesis",
+    DREAMCAST = "dreamcast",
+    GAMEBOY = "gameboy",
+    FAMICOM = "famicom",
+    XBOX = "xbox",
+    XBOX360 = "xbox360",
+    XBOXONE = "xboxone",
+}
 
 export default platforms;

@@ -3,6 +3,7 @@ import "./style/index.scss";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import { RootView } from "./view/root";
+import { SourceProvider } from "./sources";
 
 function App() {
     return (
@@ -27,10 +28,12 @@ function App() {
                 primaryShade: 7,
             })}
         >
-            <ModalsProvider>
-                <Notifications />
-                <RootView />
-            </ModalsProvider>
+            <SourceProvider>
+                <ModalsProvider>
+                    <Notifications />
+                    <RootView />
+                </ModalsProvider>
+            </SourceProvider>
         </MantineProvider>
     );
 }

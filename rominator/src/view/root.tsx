@@ -2,7 +2,6 @@ import {
     ActionIcon,
     AppShell,
     Box,
-    Button,
     Divider,
     Group,
     Paper,
@@ -16,7 +15,7 @@ import {
     IconSearch,
     IconSettings,
 } from "@tabler/icons-react";
-import { invoke } from "@tauri-apps/api/tauri";
+import { SearchTab } from "./search/SearchTab";
 
 export function RootView() {
     return (
@@ -97,17 +96,7 @@ export function RootView() {
                             </Tabs.Tab>
                         </Tabs.List>
                         <Tabs.Panel value="search">
-                            <Button
-                                onClick={() =>
-                                    invoke("extract_file", {
-                                        archivePath:
-                                            "/home/itec/Downloads/retroarch-assets-1.19.0.zip",
-                                        extractPath: "/home/itec/Downloads",
-                                    }).then(console.log)
-                                }
-                            >
-                                PRESS ME
-                            </Button>
+                            <SearchTab />
                         </Tabs.Panel>
                         <Tabs.Panel value="library">EEE</Tabs.Panel>
                     </Tabs>
