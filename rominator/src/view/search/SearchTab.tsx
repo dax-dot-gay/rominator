@@ -9,7 +9,6 @@ import {
     Divider,
     Fieldset,
     Group,
-    Image,
     MultiSelect,
     Pagination,
     Paper,
@@ -106,8 +105,11 @@ const ResultItem = memo(
                         p="xs"
                     >
                         <Group gap="xs">
-                            {item.tags.map((tag) => (
-                                <Pill withRemoveButton={false} key={tag}>
+                            {item.tags.map((tag, index) => (
+                                <Pill
+                                    withRemoveButton={false}
+                                    key={tag + "-" + index}
+                                >
                                     {tag}
                                 </Pill>
                             ))}
@@ -167,7 +169,6 @@ export function SearchTab() {
     );
     const theme = useMantineTheme();
     const sources = useSources();
-    console.log(results);
 
     return (
         <Stack className="app-view search" gap="sm" h="100%">

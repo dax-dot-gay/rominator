@@ -43,7 +43,6 @@ export function DownloadProvider({
                 target.status = "done";
             }
             downloads.set(target.id, target);
-            console.log(target.filename, target.progress);
         },
         [downloads],
     );
