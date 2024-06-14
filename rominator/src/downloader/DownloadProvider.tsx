@@ -4,16 +4,35 @@ import { Download, DownloadContext, DownloadProgress } from "./types";
 import { Plugin, PluginSearchResult } from "../util/plugins/pluginTypes";
 import { invoke } from "@tauri-apps/api";
 import { v4 } from "uuid";
-import { appDataDir } from "@tauri-apps/api/path";
+import { resolve } from "@tauri-apps/api/path";
 import { Event, UnlistenFn, listen } from "@tauri-apps/api/event";
+import { createDir, exists } from "@tauri-apps/api/fs";
+import { useDownloadsPath } from "../util/config";
+import platforms from "../util/platforms";
 
 const MAX_RUNNING = 4;
 
-async function downloadFile(download: Download) {
+async function downloadFile(download: Download, downloadRoot: string | null) {
+    if (!downloadRoot) {
+        return;
+    }
+    const dlPath = await resolve(
+        downloadRoot,
+        download.item.platform ?? "generic",
+        download.item.platform
+            ? platforms.get(download.item.platform)?.vendor ?? "unbranded"
+            : "unbranded",
+    );
+
+    if (!(await exists(dlPath))) {
+        await createDir(dlPath, {
+            recursive: true,
+        });
+    }
     await invoke("download_file", {
         id: download.id,
         url: download.url as string,
-        directory: await appDataDir(),
+        directory: dlPath,
         filename: download.filename as string,
     });
 }
@@ -25,6 +44,7 @@ export function DownloadProvider({
 }) {
     const downloads = useMap<string, Download>([]);
     const [sync, setSync] = useState<number>(Date.now());
+    const [downloadPath] = useDownloadsPath();
 
     useEffect(() => {
         const interval = setInterval(() => setSync(Date.now()), 500);
@@ -117,6 +137,7 @@ export function DownloadProvider({
                                     status: "downloading",
                                 })
                                 .get(id) as Download,
+                            downloadPath,
                         );
                     }
                     break;
