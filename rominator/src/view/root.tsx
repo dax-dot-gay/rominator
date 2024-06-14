@@ -28,7 +28,7 @@ import {
 import { SearchTab } from "./search/SearchTab";
 import { useDisclosure } from "@mantine/hooks";
 import { Download, useDownloads } from "../downloader";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 function DownloadItem({ download }: { download: Download }) {
     const icon = useMemo(() => {
@@ -103,7 +103,7 @@ function DownloadItem({ download }: { download: Download }) {
     }, [download.status, download.progress]);
     return (
         <Paper className="download-item" radius="xs" p="xs">
-            <Group gap="sm">
+            <Group gap="sm" wrap="nowrap">
                 {icon}
                 <Stack gap={2}>
                     <Text size="sm">{download.item.name}</Text>
