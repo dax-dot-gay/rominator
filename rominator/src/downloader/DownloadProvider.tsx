@@ -18,10 +18,10 @@ async function downloadFile(download: Download, downloadRoot: string | null) {
     }
     const dlPath = await resolve(
         downloadRoot,
-        download.item.platform ?? "generic",
         download.item.platform
             ? platforms.get(download.item.platform)?.vendor ?? "unbranded"
             : "unbranded",
+        download.item.platform ?? "generic",
     );
 
     if (!(await exists(dlPath))) {
