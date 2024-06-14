@@ -10,19 +10,16 @@ import {
     RingProgress,
     ScrollAreaAutosize,
     Stack,
-    Tabs,
     Text,
     Tooltip,
 } from "@mantine/core";
 import {
     IconDeviceGamepad2,
     IconDownload,
-    IconLibrary,
     IconProgress,
     IconProgressBolt,
     IconProgressCheck,
     IconProgressX,
-    IconSearch,
     IconSettings,
 } from "@tabler/icons-react";
 import { SearchTab } from "./search/SearchTab";
@@ -218,41 +215,9 @@ export function RootView() {
                 </Group>
             </AppShell.Header>
             <AppShell.Main className="app-wrapper">
-                <Box className="app-content">
-                    <Tabs
-                        className="main-nav"
-                        orientation="vertical"
-                        defaultValue="search"
-                        classNames={{ panel: "nav-panel" }}
-                    >
-                        <Tabs.List>
-                            <Tabs.Tab value="search">
-                                <Group
-                                    gap="sm"
-                                    justify="space-between"
-                                    align="start"
-                                >
-                                    <IconSearch size={20} />
-                                    <Text>Search</Text>
-                                </Group>
-                            </Tabs.Tab>
-                            <Tabs.Tab value="library">
-                                <Group
-                                    gap="sm"
-                                    justify="space-between"
-                                    align="start"
-                                >
-                                    <IconLibrary size={20} />
-                                    <Text>Library</Text>
-                                </Group>
-                            </Tabs.Tab>
-                        </Tabs.List>
-                        <Tabs.Panel value="search">
-                            <SearchTab />
-                        </Tabs.Panel>
-                        <Tabs.Panel value="library">EEE</Tabs.Panel>
-                    </Tabs>
-                </Box>
+                <Paper className="app-content" p="sm" shadow="xs">
+                    <SearchTab />
+                </Paper>
                 <DownloadsPanel open={downloads} onClose={closeDownloads} />
             </AppShell.Main>
         </AppShell>

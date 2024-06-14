@@ -115,7 +115,6 @@ async function getPageCount(query: string): Promise<number | null> {
         `https://www.romspedia.com/search.php?currentpage=1&search_term_string=${query}`,
         { responseType: ResponseType.Text, method: "GET", timeout: 5 },
     );
-    console.log(result.url, result.data);
     if (result.ok) {
         const parsed = parse(result.data);
         const last_link = parsed
@@ -151,8 +150,8 @@ export async function search_romspedia(
     }
 
     await Promise.all(
-        range(1, pages + 1).map(async (page) => {
-            await sleep(Math.random() * 2);
+        range(1, pages + 1).map(async (page, index) => {
+            await sleep(index * 0.05);
             const result = await fetch<string>(
                 `https://www.romspedia.com/search.php?currentpage=${page}&search_term_string=${query}`,
                 { responseType: ResponseType.Text, method: "GET", timeout: 5 },
