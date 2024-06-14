@@ -194,6 +194,11 @@ export function SearchTab() {
                         variant="filled"
                         style={{ flexGrow: 1 }}
                         size="md"
+                        onKeyDown={(ev) => {
+                            if (ev.key === "Enter" && query.length > 0) {
+                                search();
+                            }
+                        }}
                     />
                     {!advanced && (
                         <ActionIcon
