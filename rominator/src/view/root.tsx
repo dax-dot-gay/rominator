@@ -1,7 +1,6 @@
 import {
     ActionIcon,
     AppShell,
-    Box,
     Divider,
     Drawer,
     Group,

@@ -5,6 +5,7 @@ import { Notifications } from "@mantine/notifications";
 import { RootView } from "./view/root";
 import { SourceProvider } from "./sources";
 import { DownloadProvider } from "./downloader";
+import { ConfigProvider } from "./util/config";
 
 function App() {
     return (
@@ -30,12 +31,14 @@ function App() {
             })}
         >
             <SourceProvider>
-                <DownloadProvider>
-                    <ModalsProvider>
-                        <Notifications />
-                        <RootView />
-                    </ModalsProvider>
-                </DownloadProvider>
+                <ConfigProvider>
+                    <DownloadProvider>
+                        <ModalsProvider>
+                            <Notifications />
+                            <RootView />
+                        </ModalsProvider>
+                    </DownloadProvider>
+                </ConfigProvider>
             </SourceProvider>
         </MantineProvider>
     );

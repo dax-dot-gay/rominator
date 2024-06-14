@@ -20,6 +20,7 @@ import {
     TagsInput,
     Text,
     TextInput,
+    Tooltip,
     useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure, useInputState } from "@mantine/hooks";
@@ -40,11 +41,13 @@ import { Plugin, PluginSearchResult } from "../../util/plugins/pluginTypes";
 import { uniqBy } from "lodash";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { useDownloads } from "../../downloader";
+import { useDownloadsPath } from "../../util/config";
 
 const ResultItem = memo(
     ({ item, plugin }: { item: PluginSearchResult; plugin: Plugin }) => {
         const platform = platforms.get(item.platform ?? "unknown");
         const { addDownload } = useDownloads();
+        const [downloadPath] = useDownloadsPath();
 
         return (
             <Paper className="result-item" id={item.id} p="sm">
@@ -74,12 +77,21 @@ const ResultItem = memo(
                                 </Text>
                             </Stack>
                         </Group>
-                        <ActionIcon
-                            variant="light"
-                            onClick={() => addDownload(item, plugin)}
-                        >
-                            <IconDownload size={20} />
-                        </ActionIcon>
+
+                        {downloadPath ? (
+                            <ActionIcon
+                                variant="light"
+                                onClick={() => addDownload(item, plugin)}
+                            >
+                                <IconDownload size={20} />
+                            </ActionIcon>
+                        ) : (
+                            <Tooltip label="No download directory set.">
+                                <ActionIcon variant="light" disabled>
+                                    <IconDownload size={20} />
+                                </ActionIcon>
+                            </Tooltip>
+                        )}
                     </Group>
                     {item.image ? (
                         <img
