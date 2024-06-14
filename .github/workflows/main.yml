@@ -1,9 +1,7 @@
 name: 'publish'
 
 on:
-  push:
-    branches:
-      - release
+  - workflow_dispatch
 
 # This workflow will trigger on each push to the `release` branch to create or update a GitHub release, build your app, and upload the artifacts to the release.
 
@@ -59,5 +57,5 @@ jobs:
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: false
-          projectPath: 'rominator'
+          projectPath: './rominator'
           args: ${{ matrix.args }}
