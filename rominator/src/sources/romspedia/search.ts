@@ -112,14 +112,16 @@ function parsePage(html: string): ParsedRomItem[] {
 
 async function getPageCount(query: string): Promise<number | null> {
     const result = await fetch<string>(
-        `https://www.romspedia.com/search.php?currentpage=1&search_term_string=${encodeURIComponent(query)}`,
+        `https://www.romspedia.com/search.php?currentpage=1&search_term_string=${query}`,
         { responseType: ResponseType.Text, method: "GET", timeout: 5 },
     );
+    console.log(result.url, result.data);
     if (result.ok) {
         const parsed = parse(result.data);
         const last_link = parsed
             .querySelectorAll(".pagination li.page-item a.page-link")
             .pop();
+
         if (last_link) {
             try {
                 const query_string = new URLSearchParams(
@@ -127,8 +129,10 @@ async function getPageCount(query: string): Promise<number | null> {
                 );
                 return Number(query_string.get("currentpage")) ?? null;
             } catch {
-                return null;
+                return 1;
             }
+        } else {
+            return 1;
         }
     }
     return null;
@@ -150,7 +154,7 @@ export async function search_romspedia(
         range(1, pages + 1).map(async (page) => {
             await sleep(Math.random() * 2);
             const result = await fetch<string>(
-                `https://www.romspedia.com/search.php?currentpage=${page}&search_term_string=${encodeURIComponent(query)}`,
+                `https://www.romspedia.com/search.php?currentpage=${page}&search_term_string=${query}`,
                 { responseType: ResponseType.Text, method: "GET", timeout: 5 },
             );
             if (result.ok) {
