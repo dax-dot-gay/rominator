@@ -55,7 +55,7 @@ pub async fn start_download(url: String, directory: String, filename: String, id
         .or(Err(format!("Failed to GET from '{}'", &url)))
         .expect(&format!("Failed to GET from '{}'", &url));
 
-    let filepath = Path::new(&directory).join(format!("{}.cbz", filename));
+    let filepath = Path::new(&directory).join(filename);
     let mut file = File::create(&filepath).await.or({
         Err("Error while creating the file")
     }).expect("File creation failed.");
