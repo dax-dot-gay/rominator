@@ -7,6 +7,9 @@ on:
 
 jobs:
   publish-tauri:
+    defaults:
+      run:
+        working-directory: ./rominator
     permissions:
       contents: write
     strategy:
@@ -57,5 +60,4 @@ jobs:
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: false
-          projectPath: './rominator'
           args: ${{ matrix.args }}
