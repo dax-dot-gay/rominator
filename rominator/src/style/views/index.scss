@@ -50,3 +50,7 @@
         background-color: var(--mantine-color-default);
     }
 }
+
+.downloads-input * {
+    cursor: pointer !important;
+}

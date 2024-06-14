@@ -17,16 +17,17 @@ export function useDownloadsPath(): [
 }
 
 export function useEnabledSources(): {
-    sources: Plugin[];
+    sources: (Plugin & { enabled: boolean })[];
     toggle: (id: string) => void;
 } {
     const conf = useConfig();
     const sources = useSources();
 
     return {
-        sources: conf.config.enabledSources
-            .map((s) => sources.sources[s])
-            .filter((v) => v !== undefined),
+        sources: Object.values(sources.sources).map((source) => ({
+            ...source,
+            enabled: conf.config.enabledSources.includes(source.id),
+        })),
         toggle: conf.toggleSource,
     };
 }

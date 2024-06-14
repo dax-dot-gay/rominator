@@ -25,6 +25,7 @@ import { SearchTab } from "./search/SearchTab";
 import { useDisclosure } from "@mantine/hooks";
 import { Download, useDownloads } from "../downloader";
 import { useMemo } from "react";
+import { SettingsModal } from "./SettingsModal";
 
 function DownloadItem({ download }: { download: Download }) {
     const icon = useMemo(() => {
@@ -158,6 +159,8 @@ export function RootView() {
     const isDownloading = [...useDownloads().downloads.values()].some(
         (v) => v.status === "downloading",
     );
+    const [settings, { open: openSettings, close: closeSettings }] =
+        useDisclosure(false);
 
     return (
         <AppShell header={{ height: 64 }} className="app-root" p="sm">
@@ -206,6 +209,7 @@ export function RootView() {
                             <ActionIcon
                                 className="app-action"
                                 variant="transparent"
+                                onClick={() => openSettings()}
                             >
                                 <IconSettings />
                             </ActionIcon>
@@ -218,6 +222,7 @@ export function RootView() {
                     <SearchTab />
                 </Paper>
                 <DownloadsPanel open={downloads} onClose={closeDownloads} />
+                <SettingsModal opened={settings} onClose={closeSettings} />
             </AppShell.Main>
         </AppShell>
     );
