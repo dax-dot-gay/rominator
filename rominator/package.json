@@ -19,6 +19,7 @@
         "@tauri-apps/api": "^1",
         "lodash": "^4.17.21",
         "lowdb": "^7.0.1",
+        "mime-types": "^2.1.35",
         "node-html-parser": "^6.1.13",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -29,6 +30,7 @@
     "devDependencies": {
         "@tauri-apps/cli": "^1",
         "@types/lodash": "^4.17.5",
+        "@types/mime-types": "^2.1.4",
         "@types/react": "^18.2.15",
         "@types/react-dom": "^18.2.7",
         "@types/react-responsive-masonry": "^2.1.3",

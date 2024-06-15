@@ -82,12 +82,12 @@ platforms.add("wii", "Wii", "Nintendo", "Wii");
 platforms.add("gamecube", "GameCube", "Nintendo", "GameCube");
 platforms.add("n64", "Nintendo 64", "Nintendo");
 platforms.add("snes", "Super Nintendo Entertainment System", "Nintendo");
-platforms.add("ps1", "PlayStation 1", "Sony", null, "Sony - PlayStation.svg");
+platforms.add("psx", "PlayStation 1", "Sony", null, "Sony - PlayStation.svg");
 platforms.add("ps3", "PlayStation 3", "Sony");
 platforms.add("nes", "Nintendo Entertainment System", "Nintendo");
 platforms.add("gbc", "Game Boy Color", "Nintendo");
 platforms.add(
-    "genesis",
+    "magadrive",
     "Sega Genesis/Megadrive",
     "Sega",
     "Genesis",
@@ -95,16 +95,8 @@ platforms.add(
 );
 platforms.add("dreamcast", "Dreamcast", "Sega", "Dreamcast");
 platforms.add("gb", "Game Boy", "Nintendo");
-platforms.add(
-    "famicom",
-    "Famicom",
-    "Nintendo",
-    "Famicom",
-    "Nintendo - Family Computer Disk System.svg",
-);
 platforms.add("xbox", "Xbox", "Microsoft");
 platforms.add("xbox360", "Xbox 360", "Microsoft");
-platforms.add("xboxone", "Xbox One", "Microsoft");
 
 export enum PlatformIDs {
     PSP = "psp",
@@ -123,10 +115,8 @@ export enum PlatformIDs {
     GENESIS = "genesis",
     DREAMCAST = "dreamcast",
     GAMEBOY = "gameboy",
-    FAMICOM = "famicom",
     XBOX = "xbox",
     XBOX360 = "xbox360",
-    XBOXONE = "xboxone",
 }
 
 export default platforms;
